@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "synthesia-video-converter"
+version = "0.1.0"
+description = ""
+authors = ["edvein-rin <edveinrin@gmail.com>"]
+license = "CC BY-NC-SA 4.0"
+readme = "README.md"
+packages = [{include = "synthesia-video-converter"}]
+
+[tool.poetry.scripts]
+run = "synthesia-video-converter:main"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+opencv-python = "^4.7.0.72"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+mkdocs = "^1.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
