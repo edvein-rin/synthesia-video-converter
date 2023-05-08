@@ -1,19 +1,20 @@
 [tool.poetry]
-name = "synthesia-video-converter"
+name = "Synthesia Video Converter"
 version = "0.1.0"
-description = ""
+description = "Converts Synthesia video to MIDI, note sheets PDF and Music XML. Works with YouTube video links. Should work with any piano roll software, but tested on Synthesia."
 authors = ["edvein-rin <edveinrin@gmail.com>"]
+repository = "https://github.com/edvein-rin/synthesia-video-converter"
 license = "CC BY-NC-SA 4.0"
 readme = "README.md"
-packages = [{include = "synthesia-video-converter"}]
+packages = [{include = "src"}]
+include = ["LICENCE"]
 
 [tool.poetry.scripts]
-run = "synthesia-video-converter:main"
+cli = "src.cli.main:main"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 opencv-python = "^4.7.0.72"
-
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"

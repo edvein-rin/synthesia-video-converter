@@ -14,6 +14,12 @@ Install dependencies:
 make install
 ```
 
+Setup pre-commit hooks:
+
+```bash
+make setup-pre-commit-hooks
+```
+
 ## Makefile utilities
 
 
@@ -25,16 +31,19 @@ make help
 Usage: make <target>
 
 Targets:
-  help                      Show the help.
+  help                      Show help.
   install                   Install dependencies.
-  run                       Run the project.
-  test                      Test the project.
-  lint                      Lint the project code.
-  format                    Format the project code.
-  build                     Build the project.
+  setup-pre-commit-hooks    Setup pre-commit hooks.
+  run                       Run CLI.
+  build                     Build binaries for different systems.
+  test                      Test project.
+  lint                      Lint project code.
+  format                    Format project code.
   release                   Create a new tag for release.
   docs-start                Start documentation local web server.
   docs-build                Build documentation.
   docs-deploy               Deploy documentation build.
+  clean                     Clean ignored files.
+  export-dependencies       Export dependencies into requirements.txt.
   env-info                  Display virtual environment and system information.
 ```

@@ -11,6 +11,18 @@ Should work with any piano roll software, but tested on Synthesia.
 
 TODO
 
+Windows:
+
+```Powershell
+& .\synthesia-video-converter.exe
+```
+
+Unix:
+
+```bash
+python -m synthesia-video-converter
+```
+
 ## Development
 
 Read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
