@@ -14,6 +14,8 @@ setup-pre-commit-hooks: FORCE ## Setup pre-commit hooks.
 run: FORCE ## Run CLI.
 	@poetry run "cli"
 
+# TODO separate build for binaries (Win, MacOS) and package (python module)
+# https://pyinstaller.org/en/stable/usage.html#building-macos-app-bundles
 build: FORCE ## Build binaries for different systems.
 	@rm -rf ./dist
 	@rm -rf ./build
@@ -39,13 +41,13 @@ release: FORCE ## Create a new tag for release.
 	@echo "TODO release"
 
 docs-start: FORCE ## Start documentation local web server.
-	@echo "TODO docs-start"
+	@poetry run mkdocs serve
 
 docs-build: FORCE ## Build documentation.
-	@echo "TODO docs-build"
+	@poetry run mkdocs build
 
 docs-deploy: FORCE ## Deploy documentation build.
-	@echo "TODO docs-deploy"
+	@poetry run mkdocs gh-deploy
 
 clean: FORCE ## Clean ignored files.
 	@rm -rf .cache
@@ -57,6 +59,7 @@ clean: FORCE ## Clean ignored files.
 	@rm -rf htmlcov
 	@rm -rf .tox/
 	@rm -rf docs/_build
+	@rm -rf site
 	@find ./ -name '*.pyc' -exec rm -f {} +
 	@find ./ -name '*.spec' -exec rm -f {} +
 	@find ./ -name '__pycache__' -exec rm -rf {} +
