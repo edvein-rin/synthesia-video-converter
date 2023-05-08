@@ -1,0 +1,15 @@
+html {
+    font-size: 20px;
+}
+
+footer {
+    display: none;
+}
+
+:root h1, :root h2, :root h3, :root h4, :root h5, :root h6 {
+    font-weight: 700;
+}
+
+:root body[data-md-color-scheme="default"] h1 {
+    --md-default-fg-color--light: rgba(64, 64, 64, 1);
+}

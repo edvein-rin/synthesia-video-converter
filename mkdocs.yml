@@ -1,7 +1,49 @@
 site_name: Synthesia Video Converter
-theme: readthedocs
+repo_url: https://github.com/edvein-rin/synthesia-video-converter
+repo_name: edvein-rin/synthesia-video-converter
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.action.edit
+  icon:
+    logo: material/piano
+    repo: fontawesome/brands/github-alt
+  font:
+    text: Lato
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+extra_css:
+  - stylesheets/extra.css
+extra:
+  generator: false
+
 nav:
   - Home: index.md
-  - Algorithm: algorithm.md
-  - Comparison of Existing Solutions: comparison-of-existing-solutions.md
-  - Project Structure: project-structure.md
+  - Theory:
+    - Algorithm: algorithm.md
+    - Comparison of Existing Solutions: comparison-of-existing-solutions.md
+  - Development:
+    - Project Structure: project-structure.md
