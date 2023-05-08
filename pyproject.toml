@@ -19,6 +19,7 @@ opencv-python = "^4.7.0.72"
 pytest = "^7.3.1"
 mkdocs = "^1.4.3"
 pyinstaller = "^5.10.1"
+pre-commit = "^3.3.1"
 
 [build-system]
 requires = ["poetry-core"]
