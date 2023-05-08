@@ -1,2 +1,7 @@
 site_name: Synthesia Video Converter
 theme: readthedocs
+nav:
+  - Home: index.md
+  - Algorithm: algorithm.md
+  - Comparison of Existing Solutions: comparison-of-existing-solutions.md
+  - Project Structure: project-structure.md
