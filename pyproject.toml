@@ -22,6 +22,8 @@ mkdocs = "^1.4.3"
 pyinstaller = "^5.10.1"
 pre-commit = "^3.3.1"
 mkdocs-material = "^9.1.10"
+flake8 = "^6.0.0"
+black = "^23.3.0"
 
 [build-system]
 requires = ["poetry-core"]
