@@ -47,3 +47,10 @@ Targets:
   export-dependencies       Export dependencies into requirements.txt.
   env-info                  Display virtual environment and system information.
 ```
+
+## Troubleshoots
+
+### CV2 autocomplete doesn't work in my IDE
+
+Issue: https://stackoverflow.com/questions/73174194/opencv-autocomplete-not-working-on-pycharm
+Workaround: https://stackoverflow.com/a/75054982
