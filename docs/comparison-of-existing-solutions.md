@@ -1,6 +1,6 @@
 # Comparison of Existing Solutions
 
-There are a lot of working solutions, but most of them work poorly so here is only a small subset.
+There are a lot of working solutions, but most of them work poorly so here is only a small subset of good ones.
 
 ## 1. [video2midi](https://github.com/svsdval/video2midi)
 
@@ -44,7 +44,7 @@ YouTube: [Creating MIDI from hybrid Synthesia Video](https://www.youtube.com/wat
 
 ## 10. [JohnDoesStuff - Getting MIDI from Synthesia videos](https://github.com/johndoesstuff/randomProjects/blob/master/synthesia%20midi.zip)
 
-No stars as it's even not in a separate repository, but it is actually not a bad project and it's better then a lot of projects above.
+No stars as it's even not in a separate repository, but it is actually not a bad project and it's better than a lot of projects above.
 
 YouTube: [Getting MIDI from Synthesia videos](https://www.youtube.com/watch?v=rL5XpzqTqJo).  
 ![YouTube Video Views](https://img.shields.io/youtube/views/rL5XpzqTqJo?style=social)
