@@ -12,7 +12,10 @@ setup-pre-commit-hooks: FORCE ## Setup pre-commit hooks.
 	@poetry run pre-commit install
 
 run: FORCE ## Run CLI.
-	@poetry run "cli"
+	@poetry run bash -c "python -m src ${video}"
+
+dev: FORCE ## Run CLI in a dev mode.
+	@poetry run bash -c "python -m src ${video} --debug"
 
 # TODO separate build for binaries (Win, MacOS) and package (python module)
 # https://pyinstaller.org/en/stable/usage.html#building-macos-app-bundles

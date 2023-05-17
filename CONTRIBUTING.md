@@ -35,6 +35,7 @@ Targets:
   install                   Install dependencies.
   setup-pre-commit-hooks    Setup pre-commit hooks.
   run                       Run CLI.
+  dev                       Run CLI in a dev mode.
   build                     Build binaries for different systems.
   test                      Test project.
   lint                      Lint project code.
