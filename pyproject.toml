@@ -7,7 +7,7 @@ repository = "https://github.com/edvein-rin/synthesia-video-converter"
 license = "CC BY-NC-SA 4.0"
 readme = "README.md"
 packages = [{include = "src"}]
-include = ["LICENCE"]
+include = ["LICENCE", "requirements.txt"]
 
 [tool.poetry.scripts]
 cli = "src.cli.main:main"

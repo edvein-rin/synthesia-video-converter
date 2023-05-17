@@ -22,7 +22,7 @@ build: FORCE ## Build binaries for different systems.
 	# UNIX
 	@poetry build -f sdist
 	@find ./dist -name "*.tar.gz" -exec tar -zxvf {} -C ./dist/ \; -exec rm -rf {} \;
-	@find ./dist -name "src" -exec sh -c "mv {}/* {}/.." \;
+	@find ./dist -name "src" -exec sh -c "mv '{}'/* '{}/..'" \;
 	@find ./dist -name "src" -exec rm -rf {} +
 	@mv ./dist/* ./dist/synthesia-video-converter
 	# Windows
