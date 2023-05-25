@@ -4,7 +4,7 @@ from ...entities import FallingRectangle
 
 
 def frame_contours_to_falling_rectangles(
-    frame_contours, play_line_y
+    frame_contours, play_line_y: int
 ) -> [FallingRectangle]:
     falling_keys = []
     for i, contour in enumerate(frame_contours):
