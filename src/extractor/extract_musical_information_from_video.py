@@ -3,23 +3,26 @@ import datetime
 
 import cv2
 
-from .process_frame import process_frame
 from ..settings import Settings
+
+from .detect_keyboard import detect_keyboard
+from .detect_falling_keys import detect_falling_keys
+from .detect_play_line import detect_play_line
 
 settings = Settings()
 
 
 def extract_musical_information_from_video(
-    VIDEO_FILE_PATH: str,
+    video_file_path: str,
 ) -> None:
-    does_file_exist = os.path.isfile(VIDEO_FILE_PATH)
+    does_file_exist = os.path.isfile(video_file_path)
 
     if not does_file_exist:
         raise FileNotFoundError(
-            f'File "{VIDEO_FILE_PATH}" doesn\'t exist.'
+            f'File "{video_file_path}" doesn\'t exist.'
         )
 
-    video_capture = cv2.VideoCapture(VIDEO_FILE_PATH)
+    video_capture = cv2.VideoCapture(video_file_path)
 
     frames = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
     fps = video_capture.get(cv2.CAP_PROP_FPS)
@@ -31,7 +34,7 @@ def extract_musical_information_from_video(
     if settings.is_debug:
         print(f"Frames: {frames}")
         print(f"FPS: {fps}")
-        print(f"Video duration: {video_time} ({seconds} seconds)")
+        print(f"Video duration: {video_time} ({seconds} seconds)\n")
 
     # TODO several video loops
     #
@@ -49,18 +52,20 @@ def extract_musical_information_from_video(
     #
     # Forth one:
     # 1. Detecting actual falling keys.
-    while video_capture.isOpened():
-        ret, frame = video_capture.read()
 
-        has_stream_ended = not ret
-        if has_stream_ended:
-            print("Stream ended.")
-            break
+    play_line = detect_play_line(
+        video_capture,
+        settings.default_play_line_relative_position_to_top,
+    )
 
-        process_frame(frame)
+    video_capture.open(video_file_path)
+    keyboard = detect_keyboard(video_capture, play_line)
+    print(keyboard)
 
-        if settings.is_debug and cv2.waitKey(wait_delay) == ord("q"):
-            break
+    video_capture.open(video_file_path)
+    falling_keys = detect_falling_keys(
+        video_capture, keyboard, wait_delay
+    )
+    print(f"{falling_keys=}")
 
-    video_capture.release()
     cv2.destroyAllWindows()
