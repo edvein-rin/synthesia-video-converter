@@ -5,14 +5,9 @@ from ..entities import Keyboard, FallingRectangle
 from .. import debugger
 
 from .frame_helpers import (
-    blur_frame,
-    cut_frame_vertically,
     find_frame_contours,
     frame_contours_to_falling_rectangles,
-    grayscale_frame,
-    increase_frame_contrast,
-    perform_morphological_open_with_frame,
-    threshold_frame,
+    prepare_frame_for_analysis,
 )
 
 settings = Settings()
@@ -41,7 +36,7 @@ def detect_falling_keys(
             frame, keyboard, frame_number, wait_delay
         )
 
-        falling_keys.append(
+        falling_keys.join(
             __convert_falling_rectangles_to_falling_keys(
                 falling_rectangles, keyboard, frame_time
             )
@@ -62,23 +57,18 @@ def __extract_falling_rectangles_from_frame(
     screen_height = len(frame)
 
     # TODO remove static background below keys
-    prepared_frame = perform_morphological_open_with_frame(
-        threshold_frame(
-            blur_frame(
-                grayscale_frame(increase_frame_contrast(frame))
-            )
-        )
-    )
 
-    cut_prepared_frame, play_line_y = cut_frame_vertically(
-        prepared_frame,
-        settings.default_play_line_relative_position_to_top,
-    )
+    prepared_for_analysis_frame = prepare_frame_for_analysis(frame)
+    prepared_for_analysis_frame_line = prepared_for_analysis_frame[
+        keyboard.play_line.y : keyboard.play_line.y + 1
+    ]
 
-    frame_contours = find_frame_contours(cut_prepared_frame)
+    frame_contours = find_frame_contours(
+        prepared_for_analysis_frame_line
+    )
 
     falling_rectangles = frame_contours_to_falling_rectangles(
-        frame_contours, play_line_y
+        frame_contours, keyboard.play_line.y
     )
 
     # TODO add color into falling_rectangles
