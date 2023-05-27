@@ -60,12 +60,16 @@ def extract_musical_information_from_video(
 
     video_capture.open(video_file_path)
     keyboard = detect_keyboard(video_capture, play_line)
-    print(keyboard)
+
+    if settings.is_debug:
+        print(keyboard)
 
     video_capture.open(video_file_path)
     falling_keys = detect_falling_keys(
         video_capture, keyboard, wait_delay
     )
-    print(f"{falling_keys=}")
+
+    if settings.is_debug:
+        print(f"{falling_keys=}")
 
     cv2.destroyAllWindows()
