@@ -36,10 +36,8 @@ def detect_falling_keys(
             frame, keyboard, frame_number, wait_delay
         )
 
-        falling_keys.join(
-            __convert_falling_rectangles_to_falling_keys(
-                falling_rectangles, keyboard, frame_time
-            )
+        falling_keys += __convert_falling_rectangles_to_falling_keys(
+            falling_rectangles, keyboard, frame_time
         )
 
         if settings.is_debug and cv2.waitKey(wait_delay) == ord("q"):
