@@ -30,6 +30,10 @@ class FallingRectangle(object):
     def center_x(self):
         return self.x + self.width / 2
 
+    @property
+    def right_x(self):
+        return self.x + self.width
+
     def draw(self, image, color=(0, 255, 0)):
         cv2.rectangle(
             image,

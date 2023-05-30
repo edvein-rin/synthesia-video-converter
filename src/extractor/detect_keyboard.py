@@ -44,31 +44,34 @@ def detect_keyboard(video_capture, play_line: PlayLine) -> Keyboard:
         )
     )
 
-    # TODO detect
-    number_of_white_keys = (
-        52
-        if average_white_key_width > 20
-        and average_white_key_width < 26
-        else None
+    if settings.is_debug:
+        print(f"Average white key width: {average_white_key_width}")
+        print(f"Average black key width: {average_black_key_width}")
+
+    # TODO
+    # For video 2 perfect parameters should be:
+    # inner_offset, white_key_width = (14, 25)
+    inner_offset, white_key_width = (
+        __detect_inner_offset_and_white_key_width(
+            falling_rectangles,
+            average_white_key_width,
+        )
     )
 
-    white_key_x_offset = 0
-    black_key_x_offset = 0
+    if settings.is_debug:
+        print(f"Inner offset: {inner_offset}")
+        print(f"White key width: {white_key_width}")
 
-    white_key_width = (
-        average_white_key_width
-        if number_of_white_keys is None
-        else video_width / number_of_white_keys
-    )
+    # TODO calculate it? Actually white key size can be used as it covers
+    # full area between black keys
+    black_key_width = average_black_key_width
 
     return Keyboard(
         video_width,
-        number_of_white_keys,
         white_key_width,
-        average_black_key_width,
+        black_key_width,
+        inner_offset,
         play_line,
-        white_key_x_offset,
-        black_key_x_offset,
     )
 
 
@@ -93,6 +96,7 @@ def __extract_falling_rectangles_from_frame(
 def __find_average_black_and_white_keys_width(
     key_widths: np.array,
 ) -> tuple[int, int]:
+    print(key_widths)
     # TODO automatically detect too big keys
     filtered_key_widths = filter(
         lambda key_width: key_width < 200, key_widths
@@ -103,23 +107,12 @@ def __find_average_black_and_white_keys_width(
         key_widths_series.value_counts().sort_index()
     )
 
-    if settings.is_debug:
-        print("Key widths value counts:")
-        print(key_widths_value_counts)
-
     count_mean = key_widths_value_counts.mean()
-
-    if settings.is_debug:
-        print("Count mean: ", count_mean)
 
     mean_key_widths_value_counts = pd.Series()
     for key_width, count in key_widths_value_counts.items():
         if count >= count_mean:
             mean_key_widths_value_counts[key_width] = count
-
-    if settings.is_debug:
-        print("Mean key widths value counts:")
-        print(mean_key_widths_value_counts)
 
     for key_width_a, count_a in mean_key_widths_value_counts.items():
         for (
@@ -146,18 +139,12 @@ def __find_average_black_and_white_keys_width(
                 except KeyError:
                     pass
 
-    if settings.is_debug:
-        print(mean_key_widths_value_counts)
-
     average_white_key_width = None
     average_black_key_width = None
 
     mean_key_widths = np.sort(
         mean_key_widths_value_counts.index.to_numpy()
     )
-
-    if settings.is_debug:
-        print(mean_key_widths)
 
     average_white_key_width = (
         mean_key_widths[-1]
@@ -170,7 +157,159 @@ def __find_average_black_and_white_keys_width(
         else float("inf")
     )
 
-    if settings.is_debug:
-        print(average_white_key_width, average_black_key_width)
-
     return average_black_key_width, average_white_key_width
+
+
+def __get_white_rectangles_from_falling_rectangles(
+    falling_rectangles: [FallingRectangle],
+    average_white_key_width: float,
+) -> [FallingRectangle]:
+    filtered_falling_rectangles = []
+
+    for falling_rectangle in falling_rectangles:
+        if (
+            falling_rectangle.width <= average_white_key_width * 1.25
+            and falling_rectangle.width
+            >= average_white_key_width * 0.75
+        ):
+            filtered_falling_rectangles.append(falling_rectangle)
+
+    return filtered_falling_rectangles
+
+
+def __detect_inner_offset_and_white_key_width(
+    falling_rectangles: [FallingRectangle],
+    average_white_key_width: float,
+) -> tuple[float, float]:
+    """
+    Calculates inner_offset and white key width.
+
+    Conditions that should match:
+    1) 0 <= inner_offset <= white_key_width
+    2) average_white_key_width <= white_key_width <=
+    <= average_white_key_width * C,
+    where C = 1.5
+
+    And for each rectangle in a testing group (rec):
+    1) inner_offset + n * white_key_width <= rectangle.x <=
+    <= inner_offset + (n + 1) * white_key_width
+    2) inner_offset + n * white_key_width <= rec.right_x <=
+    <= inner_offset + (n + 1) * white_key_width
+    """
+
+    # TODO refactor
+
+    NUMBER_OF_WHITE_KEYS = 52
+
+    white_rectangles = __get_white_rectangles_from_falling_rectangles(
+        falling_rectangles, average_white_key_width
+    )
+
+    MAX_NUMBER_OF_DIFFERENT_WHITE_FALLING_RECTANGLES = (
+        NUMBER_OF_WHITE_KEYS - 1
+    )
+
+    different_white_falling_rectangles: [FallingRectangle] = []
+    for white_rectangle in white_rectangles:
+        if (
+            len(different_white_falling_rectangles)
+            >= MAX_NUMBER_OF_DIFFERENT_WHITE_FALLING_RECTANGLES
+        ):
+            break
+
+        if len(different_white_falling_rectangles) == 1:
+            different_white_falling_rectangles.append(white_rectangle)
+            continue
+
+        if all(
+            [
+                white_rectangle.x
+                + white_rectangle.width
+                - (
+                    different_white_falling_rectangle.x
+                    + different_white_falling_rectangle.width
+                )
+                >= average_white_key_width
+                for different_white_falling_rectangle in different_white_falling_rectangles
+            ]
+        ):
+            different_white_falling_rectangles.append(white_rectangle)
+
+    white_key_width = None
+    inner_offset = None
+    max_fitted_falling_rectangles = 0
+
+    MAYBE_WHITE_KEY_PARAMETER = 1.5
+    MAYBE_WHITE_KEY_STEP = 0.1
+    MAYBE_INNER_OFFSET_STEP = 0.1
+
+    for maybe_white_key_width in np.arange(
+        average_white_key_width,
+        average_white_key_width * MAYBE_WHITE_KEY_PARAMETER,
+        MAYBE_WHITE_KEY_STEP,
+    ):
+        for maybe_inner_offset in np.arange(
+            0, maybe_white_key_width, MAYBE_INNER_OFFSET_STEP
+        ):
+            number_of_fitted_falling_rectangles = 0
+
+            for (
+                different_white_falling_rectangle
+            ) in different_white_falling_rectangles:
+                for n in range(NUMBER_OF_WHITE_KEYS):
+                    if (
+                        maybe_inner_offset + n * maybe_white_key_width
+                        <= different_white_falling_rectangle.x
+                        and different_white_falling_rectangle.x
+                        <= maybe_inner_offset
+                        + (n + 1) * maybe_white_key_width
+                        and maybe_inner_offset
+                        + n * maybe_white_key_width
+                        <= different_white_falling_rectangle.right_x
+                        and different_white_falling_rectangle.right_x
+                        <= maybe_inner_offset
+                        + (n + 1) * maybe_white_key_width
+                    ):
+                        number_of_fitted_falling_rectangles += 1
+                        break
+                    else:
+                        continue
+
+            if (
+                number_of_fitted_falling_rectangles
+                >= max_fitted_falling_rectangles
+            ):
+                if (
+                    number_of_fitted_falling_rectangles
+                    > max_fitted_falling_rectangles
+                ):
+                    # print(
+                    #     inner_offset,
+                    #     white_key_width,
+                    #     number_of_fitted_falling_rectangles,
+                    # )
+                    inner_offset = maybe_inner_offset
+                    white_key_width = maybe_white_key_width
+                    max_fitted_falling_rectangles = (
+                        number_of_fitted_falling_rectangles
+                    )
+                elif (
+                    inner_offset is None
+                    or maybe_inner_offset < inner_offset
+                ):
+                    # print(
+                    #     inner_offset,
+                    #     white_key_width,
+                    #     number_of_fitted_falling_rectangles,
+                    #     maybe_inner_offset,
+                    #     maybe_white_key_width,
+                    # )
+                    inner_offset = maybe_inner_offset
+                    white_key_width = maybe_white_key_width
+
+    if white_key_width is None:
+        white_key_width = average_white_key_width
+    if inner_offset is None:
+        inner_offset = 0
+
+    return inner_offset, white_key_width
