@@ -19,6 +19,7 @@ Should work with any piano roll software, but tested on Synthesia.
 2. Make it work with flashy starts when keys are immediately near the real play line: autodetect actual play line.
 3. Make it work with background images below keys: remove static parts of the frame.
 4. Make it work with a lot of sparkles: improve thresholding.
+5. Add progress bar.
 
 
 **Enchantments**
