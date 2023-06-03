@@ -5,6 +5,7 @@ import cv2
 
 from ..settings import Settings
 from ..converter import falling_key_to_note
+from ..entities import Note
 
 from .detect_keyboard import detect_keyboard
 from .detect_falling_keys import detect_falling_keys
@@ -14,9 +15,9 @@ from .merge_falling_keys import merge_falling_keys
 settings = Settings()
 
 
-def extract_musical_information_from_video(
+def extract_notes_from_video(
     video_file_path: str,
-) -> None:
+) -> [Note]:
     does_file_exist = os.path.isfile(video_file_path)
 
     if not does_file_exist:
@@ -96,3 +97,5 @@ def extract_musical_information_from_video(
         print(f"Number of notes = {len(notes)}")
 
     cv2.destroyAllWindows()
+
+    return notes

@@ -4,7 +4,7 @@ from typing import Optional
 import typer
 from typing_extensions import Annotated
 
-from ..extractor import extract_musical_information_from_video
+from ..extractor import extract_notes_from_video
 from ..settings import Settings
 
 
@@ -21,7 +21,9 @@ def main(
     ],
     debug: bool = False,
 ) -> None:
+    video_file_path = str(video)
+
     settings = Settings()
     settings.is_debug = debug
 
-    extract_musical_information_from_video(str(video))
+    notes = extract_notes_from_video(video_file_path)

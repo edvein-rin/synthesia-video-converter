@@ -1,3 +1,3 @@
-from .extract_musical_information_from_video import (
-    extract_musical_information_from_video,
+from .extract_notes_from_video import (
+    extract_notes_from_video,
 )
