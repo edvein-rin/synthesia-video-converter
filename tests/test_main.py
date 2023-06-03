@@ -15,7 +15,7 @@ TEST_VIDEO_FILE_NAMES = {
     3: "Patrik Pietschmann | Harry Potter - Hedwig's Theme.mp4",
     # With static background below falling keys
     4: "Sergio Midi Piano | The Daydream I Miss You.mp4",
-    # With big keys
+    # With big keys and letters inside keys
     5: "Betacustic | Married Life.mp4",
     # With big keys and intro
     6: "PHianonize | Frank Sinatra - Fly Me To The Moon.mp4",
