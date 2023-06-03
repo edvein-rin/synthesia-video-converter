@@ -96,7 +96,6 @@ def __extract_falling_rectangles_from_frame(
 def __find_average_black_and_white_keys_width(
     key_widths: np.array,
 ) -> tuple[int, int]:
-    print(key_widths)
     # TODO automatically detect too big keys
     filtered_key_widths = filter(
         lambda key_width: key_width < 200, key_widths
