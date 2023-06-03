@@ -1,5 +1,6 @@
 import cv2
 
+from ..settings import Settings
 from ..midi import WHITE_NOTES
 
 from .note import Note
@@ -7,6 +8,8 @@ from .play_line import PlayLine
 
 
 NUMBER_OF_WHITE_KEYS = 52
+
+settings = Settings()
 
 
 class Keyboard(object):
@@ -88,7 +91,7 @@ class Keyboard(object):
                 / self.white_key_width
                 <= n + 1
             ):
-                white_key_number = n + 1
+                white_key_number = n
 
                 if white_key_number <= 1:
                     return Note("A#", 0)
@@ -100,13 +103,14 @@ class Keyboard(object):
                         position_in_octave == 3
                         or position_in_octave == 0
                     ):
-                        print(
-                            "WARNING This black key does not"
-                            f" exist (n = {n}, black_key_number ="
-                            f" {white_key_number}, octave ="
-                            f" {octave}, position_in_octave ="
-                            f" {position_in_octave})."
-                        )
+                        if settings.is_debug:
+                            print(
+                                "WARNING This black key does not"
+                                f" exist (n = {n}, black_key_number ="
+                                f" {white_key_number}, octave ="
+                                f" {octave}, position_in_octave ="
+                                f" {position_in_octave})."
+                            )
                         return None
 
                     note = WHITE_NOTES[position_in_octave - 1] + "#"
@@ -121,9 +125,10 @@ class Keyboard(object):
                     return Note(note, octave)
 
         raise Exception(
-            f"Black key is out of keyboard range (x = {x}, keyboard_width ="
-            f" {self.width}, inner_offset = {self.inner_offset},"
-            f" white_key_width = {self.white_key_width})"
+            f"Black key is out of keyboard range (x = {x},"
+            f" keyboard_width = {self.width}, inner_offset ="
+            f" {self.inner_offset}, white_key_width ="
+            f" {self.white_key_width})"
         )
 
     def draw(self, image):

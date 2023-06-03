@@ -83,12 +83,25 @@ def extract_notes_from_video(
         print(
             "Number of falling keys after merge:"
             f" {len(merged_falling_keys)}"
+            f" (-{len(falling_keys) - len(merged_falling_keys)})"
+        )
+
+    filtered_falling_keys = list(
+        filter(lambda x: x.duration != 0, merged_falling_keys)
+    )
+
+    if settings.is_debug:
+        print(
+            "Number of falling keys after removal of ones with zero"
+            " duration:"
+            f" {len(filtered_falling_keys)}"
+            f" (-{len(merged_falling_keys) - len(filtered_falling_keys)})"
         )
 
     notes = list(
         map(
             lambda falling_key: falling_key_to_note(falling_key),
-            merged_falling_keys,
+            filtered_falling_keys,
         )
     )
 

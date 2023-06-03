@@ -38,9 +38,15 @@ def detect_keyboard(video_capture, play_line: PlayLine) -> Keyboard:
         for falling_rectangle in falling_rectangles
     ]
 
+    filtered_key_widths = list(
+        filter(
+            lambda key_width: key_width < video_width / 2, key_widths
+        )
+    )
+
     average_black_key_width, average_white_key_width = (
         __find_average_black_and_white_keys_width(
-            np.array(key_widths)
+            np.array(filtered_key_widths)
         )
     )
 
@@ -96,19 +102,14 @@ def __extract_falling_rectangles_from_frame(
 def __find_average_black_and_white_keys_width(
     key_widths: np.array,
 ) -> tuple[int, int]:
-    # TODO automatically detect too big keys
-    filtered_key_widths = filter(
-        lambda key_width: key_width < 200, key_widths
-    )
-
-    key_widths_series = pd.Series(filtered_key_widths)
+    key_widths_series = pd.Series(key_widths, dtype=float)
     key_widths_value_counts = (
         key_widths_series.value_counts().sort_index()
     )
 
     count_mean = key_widths_value_counts.mean()
 
-    mean_key_widths_value_counts = pd.Series()
+    mean_key_widths_value_counts = pd.Series(dtype=float)
     for key_width, count in key_widths_value_counts.items():
         if count >= count_mean:
             mean_key_widths_value_counts[key_width] = count

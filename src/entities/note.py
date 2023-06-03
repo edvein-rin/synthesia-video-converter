@@ -52,3 +52,6 @@ class Note(object):
             f" duration={self.duration}"
             f" volume={self.volume} />"
         )
+
+    def __lt__(self, other):
+        return self.time < other.time

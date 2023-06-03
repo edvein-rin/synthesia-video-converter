@@ -37,8 +37,12 @@ def detect_falling_keys(
             frame, keyboard, frame_number
         )
 
+        filtered_falling_rectangles = __filter_falling_rectangles(
+            falling_rectangles, keyboard
+        )
+
         falling_keys += __convert_falling_rectangles_to_falling_keys(
-            falling_rectangles, keyboard, frame_time
+            filtered_falling_rectangles, keyboard, frame_time
         )
 
         if settings.is_debug and not settings.debug_skip_rendering:
@@ -68,8 +72,6 @@ def detect_falling_keys(
             break
     video_capture.release()
 
-    # TODO combine close falling_keys
-
     return falling_keys
 
 
@@ -93,27 +95,19 @@ def __extract_falling_rectangles_from_frame(
 
     # TODO add color into falling_rectangles
 
-    falling_rectangles = __filter_falling_rectangles(
-        falling_rectangles, keyboard
-    )
-
     return falling_rectangles
 
 
 def __filter_falling_rectangles(
     falling_rectangles: [FallingRectangle], keyboard: Keyboard
 ) -> [FallingRectangle]:
-    filtered_falling_rectangles = []
-
-    for falling_rectangle in falling_rectangles:
-        if (
-            falling_rectangle.width <= keyboard.white_key_width * 1.25
-            and falling_rectangle.width
-            >= keyboard.black_key_width * 0.75
-        ):
-            filtered_falling_rectangles.append(falling_rectangle)
-
-    return filtered_falling_rectangles
+    return list(
+        filter(
+            lambda x: x.width <= keyboard.white_key_width * 1.25
+            and x.width >= keyboard.black_key_width * 0.75,
+            falling_rectangles,
+        ),
+    )
 
 
 def __convert_falling_rectangles_to_falling_keys(

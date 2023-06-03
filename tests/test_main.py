@@ -28,4 +28,4 @@ TEST_VIDEO_FILE_PATH = os.path.join(
 
 
 def test_main():
-    main(TEST_VIDEO_FILE_PATH, True)
+    main(TEST_VIDEO_FILE_PATH, debug=True)
