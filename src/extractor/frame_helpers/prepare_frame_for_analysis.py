@@ -8,6 +8,7 @@ from .threshold_frame import threshold_frame
 
 
 def prepare_frame_for_analysis(frame):
+    # TODO remove letters inside keys
     return perform_morphological_open_with_frame(
         threshold_frame(
             blur_frame(

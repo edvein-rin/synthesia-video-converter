@@ -43,7 +43,8 @@ def detect_falling_keys(
         )
 
         if settings.is_debug:
-            # TODO change frame to draw via keys through cv2 waitKey
+            # TODO change frame to draw via keyboard
+            # shortcuts through cv2 waitKey
             frame_to_draw = frame
             # frame_to_draw = prepare_frame_for_analysis(frame)
 
