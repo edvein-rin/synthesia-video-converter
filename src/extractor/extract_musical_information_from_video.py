@@ -30,7 +30,7 @@ def extract_musical_information_from_video(
     seconds = round(frames / fps)
     video_time = datetime.timedelta(seconds=seconds)
 
-    if settings.is_debug:
+    if settings.debug_wait_delay is None:
         settings.debug_wait_delay = int(fps)
 
     if settings.is_debug:
@@ -67,9 +67,7 @@ def extract_musical_information_from_video(
         print(keyboard)
 
     video_capture.open(video_file_path)
-    falling_keys = detect_falling_keys(
-        video_capture, keyboard
-    )
+    falling_keys = detect_falling_keys(video_capture, keyboard)
 
     if settings.is_debug:
         # print(f"{falling_keys=}")

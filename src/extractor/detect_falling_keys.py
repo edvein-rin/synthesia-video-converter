@@ -41,7 +41,7 @@ def detect_falling_keys(
             falling_rectangles, keyboard, frame_time
         )
 
-        if settings.is_debug:
+        if settings.is_debug and not settings.debug_skip_rendering:
             # TODO change frame to draw via keyboard
             # shortcuts through cv2 waitKey
             frame_to_draw = frame
