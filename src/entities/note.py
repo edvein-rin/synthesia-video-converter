@@ -10,10 +10,10 @@ class Note(object):
         self,
         note: str,  # C | C# | D | D# | E | F | F# | G | G# | A | A# | B
         octave: int,  # 0-11
-        channel: int = 0,  # 0-15
         time: float = 0,
         duration: float = 0,
         volume: float = None,  # 0-127
+        channel: int = 0,  # 0-15
     ):
         self.note = note
         self.octave = octave

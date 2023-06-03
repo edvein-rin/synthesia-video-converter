@@ -4,6 +4,7 @@ import datetime
 import cv2
 
 from ..settings import Settings
+from ..converter import falling_key_to_note
 
 from .detect_keyboard import detect_keyboard
 from .detect_falling_keys import detect_falling_keys
@@ -34,6 +35,7 @@ def extract_musical_information_from_video(
         settings.debug_wait_delay = int(fps)
 
     if settings.is_debug:
+        print("\n")
         print(f"Frames: {frames}")
         print(f"FPS: {fps}")
         print(f"Video duration: {video_time} ({seconds} seconds)\n")
@@ -71,15 +73,26 @@ def extract_musical_information_from_video(
 
     if settings.is_debug:
         # print(f"{falling_keys=}")
-        print(f"Number of falling keys = {len(falling_keys)}")
+        print(f"Number of falling keys: {len(falling_keys)}")
 
     merged_falling_keys = merge_falling_keys(falling_keys)
 
     if settings.is_debug:
         # print(f"{merged_falling_keys=}")
         print(
-            "Number of falling keys after merge ="
+            "Number of falling keys after merge:"
             f" {len(merged_falling_keys)}"
         )
+
+    notes = list(
+        map(
+            lambda falling_key: falling_key_to_note(falling_key),
+            merged_falling_keys,
+        )
+    )
+
+    if settings.is_debug:
+        # print(f"{notes}")
+        print(f"Number of notes = {len(notes)}")
 
     cv2.destroyAllWindows()
