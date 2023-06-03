@@ -20,7 +20,7 @@ TEST_VIDEO_FILE_NAMES = {
     # With big keys and intro
     6: "PHianonize | Frank Sinatra - Fly Me To The Moon.mp4",
 }
-TEST_VIDEO_FILE_NAME = TEST_VIDEO_FILE_NAMES[5]
+TEST_VIDEO_FILE_NAME = TEST_VIDEO_FILE_NAMES[1]
 
 TEST_VIDEO_FILE_PATH = os.path.join(
     DATA_FOLDER_PATH, TEST_VIDEO_FILE_NAME

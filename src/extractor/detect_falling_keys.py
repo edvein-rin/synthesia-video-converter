@@ -16,7 +16,6 @@ settings = Settings()
 def detect_falling_keys(
     video_capture,
     keyboard: Keyboard,
-    wait_delay: int,
 ):
     falling_keys = []
 
@@ -35,7 +34,7 @@ def detect_falling_keys(
         frame_time = frame_number / fps
 
         falling_rectangles = __extract_falling_rectangles_from_frame(
-            frame, keyboard, frame_number, wait_delay
+            frame, keyboard, frame_number
         )
 
         falling_keys += __convert_falling_rectangles_to_falling_keys(
@@ -63,7 +62,9 @@ def detect_falling_keys(
 
             cv2.imshow("frame", frame_to_draw)
 
-        if settings.is_debug and cv2.waitKey(wait_delay) == ord("q"):
+        if settings.is_debug and cv2.waitKey(
+            settings.debug_wait_delay
+        ) == ord("q"):
             break
     video_capture.release()
 
@@ -73,7 +74,7 @@ def detect_falling_keys(
 
 
 def __extract_falling_rectangles_from_frame(
-    frame, keyboard: Keyboard, frame_number: int, wait_delay: int
+    frame, keyboard: Keyboard, frame_number: int
 ):
     # TODO remove static background below keys
 

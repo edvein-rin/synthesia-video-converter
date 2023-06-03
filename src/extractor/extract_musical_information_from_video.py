@@ -8,6 +8,7 @@ from ..settings import Settings
 from .detect_keyboard import detect_keyboard
 from .detect_falling_keys import detect_falling_keys
 from .detect_play_line import detect_play_line
+from .merge_falling_keys import merge_falling_keys
 
 settings = Settings()
 
@@ -29,7 +30,8 @@ def extract_musical_information_from_video(
     seconds = round(frames / fps)
     video_time = datetime.timedelta(seconds=seconds)
 
-    wait_delay = int(fps) if settings.is_debug else 1
+    if settings.is_debug:
+        settings.debug_wait_delay = int(fps)
 
     if settings.is_debug:
         print(f"Frames: {frames}")
@@ -66,10 +68,20 @@ def extract_musical_information_from_video(
 
     video_capture.open(video_file_path)
     falling_keys = detect_falling_keys(
-        video_capture, keyboard, wait_delay
+        video_capture, keyboard
     )
 
     if settings.is_debug:
-        print(f"{falling_keys=}")
+        # print(f"{falling_keys=}")
+        print(f"Number of falling keys = {len(falling_keys)}")
+
+    merged_falling_keys = merge_falling_keys(falling_keys)
+
+    if settings.is_debug:
+        # print(f"{merged_falling_keys=}")
+        print(
+            "Number of falling keys after merge ="
+            f" {len(merged_falling_keys)}"
+        )
 
     cv2.destroyAllWindows()

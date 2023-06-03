@@ -25,3 +25,24 @@ class FallingKey(object):
             f" volume={self.volume}"
             f" color={self.color} />"
         )
+
+    # Used for copying structure for creating instances
+    # def __repr__(self):
+    #     return (
+    #         f"FallingKey(start_time={self.start_time},"
+    #         f" duration={self.duration},"
+    #         f' note="{self.note}",'
+    #         f" octave={self.octave},"
+    #         f" volume={self.volume},"
+    #         f' color="{self.color}")'
+    #     )
+
+    def __eq__(self, other):
+        return (
+            self.start_time == other.start_time
+            and self.duration == other.duration
+            and self.note == other.note
+            and self.octave == other.octave
+            and self.volume == other.volume
+            and self.color == other.color
+        )
