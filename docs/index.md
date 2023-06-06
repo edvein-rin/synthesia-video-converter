@@ -20,6 +20,7 @@ Should work with any piano roll software, but tested on Synthesia.
 3. Make it work with background images below keys: remove static parts of the frame.
 4. Make it work with a lot of sparkles: improve thresholding.
 5. Add progress bar.
+6. Add CI/CD for tests, linting and building.
 
 
 **Enchantments**
