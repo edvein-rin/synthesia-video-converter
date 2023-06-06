@@ -8,6 +8,13 @@
 Converts Synthesia piano roll video to MIDI, note sheets PDF and Music XML.  
 Works with YouTube video links. 
 
+## Installing
+
+Install [LilyPond](http://lilypond.org/download.html).
+
+
+TODO
+
 ## Usage
 
 TODO

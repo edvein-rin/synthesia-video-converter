@@ -14,6 +14,8 @@ Install dependencies:
 make install
 ```
 
+Install [LilyPond](http://lilypond.org/download.html).
+
 Setup pre-commit hooks:
 
 ```bash
