@@ -1,4 +1,4 @@
-from ..meta.singleton import SingletonMeta
+from ..meta import SingletonMeta
 
 
 class Settings(metaclass=SingletonMeta):
@@ -7,3 +7,4 @@ class Settings(metaclass=SingletonMeta):
     # TODO add possibility to set parameters below from ENVs
     debug_wait_delay: float | None = 1
     debug_skip_rendering: bool = True
+    # TODO video_start_time and video_end_time
