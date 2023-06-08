@@ -35,11 +35,9 @@ def extract_notes_from_video(
     if settings.debug_wait_delay is None:
         settings.debug_wait_delay = int(fps)
 
-    if settings.is_debug:
-        print("\n")
-        print(f"Frames: {frames}")
-        print(f"FPS: {fps}")
-        print(f"Video duration: {video_time} ({seconds} seconds)\n")
+    print(f"Frames: {frames}")
+    print(f"FPS: {fps}")
+    print(f"Video duration: {video_time} ({seconds} seconds)\n")
 
     # TODO several video loops
     #
@@ -58,56 +56,59 @@ def extract_notes_from_video(
     # Forth one:
     # 1. Detecting actual falling keys.
 
+    print("Detecting play line...")
     play_line = detect_play_line(
         video_capture,
         settings.default_play_line_relative_position_to_top,
     )
+    print(
+        f"Play line position from top: {play_line.y}px"
+        f" ({play_line.relative_position_to_top * 100}%)"
+    )
 
+    print("Detecting keyboard...")
     video_capture.open(video_file_path)
     keyboard = detect_keyboard(video_capture, play_line)
+    print(f"Keyboard width: {keyboard.width}")
+    print(f"White key width: {keyboard.white_key_width}")
+    print(f"Black key width: {keyboard.black_key_width}")
+    print(f"Inner offset: {keyboard.inner_offset}")
 
     if settings.is_debug:
         print(keyboard)
 
+    print("Detecting falling keys...")
     video_capture.open(video_file_path)
     falling_keys = detect_falling_keys(video_capture, keyboard)
+    print(f"Number of falling keys: {len(falling_keys)}")
 
-    if settings.is_debug:
-        # print(f"{falling_keys=}")
-        print(f"Number of falling keys: {len(falling_keys)}")
-
+    print("Merging falling keys...")
     merged_falling_keys = merge_falling_keys(falling_keys)
+    print(
+        "Number of falling keys after merge:"
+        f" {len(merged_falling_keys)}"
+        f" (-{len(falling_keys) - len(merged_falling_keys)})"
+    )
 
-    if settings.is_debug:
-        # print(f"{merged_falling_keys=}")
-        print(
-            "Number of falling keys after merge:"
-            f" {len(merged_falling_keys)}"
-            f" (-{len(falling_keys) - len(merged_falling_keys)})"
-        )
-
+    print("Removing zero duration falling keys...")
     filtered_falling_keys = list(
         filter(lambda x: x.duration != 0, merged_falling_keys)
     )
+    print(
+        "Number of falling keys after removal of ones with zero"
+        " duration:"
+        f" {len(filtered_falling_keys)}"
+        f" (-{len(merged_falling_keys) - len(filtered_falling_keys)})"
+    )
 
-    if settings.is_debug:
-        print(
-            "Number of falling keys after removal of ones with zero"
-            " duration:"
-            f" {len(filtered_falling_keys)}"
-            f" (-{len(merged_falling_keys) - len(filtered_falling_keys)})"
-        )
-
+    print("Converting falling keys to notes...")
     notes = list(
         map(
             lambda falling_key: falling_key_to_note(falling_key),
             filtered_falling_keys,
         )
     )
-
-    if settings.is_debug:
-        # print(f"{notes}")
-        print(f"Number of notes = {len(notes)}")
+    print(f"Number of notes = {len(notes)}")
 
     cv2.destroyAllWindows()
 

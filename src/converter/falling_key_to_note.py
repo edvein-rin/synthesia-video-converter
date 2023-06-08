@@ -1,6 +1,7 @@
 from ..entities import FallingKey, Note
 
 
+# TODO move to Note as Note.from_falling_key(falling_key: FallingKey) -> Note:
 def falling_key_to_note(falling_key: FallingKey) -> Note:
     return Note(
         note=falling_key.note,

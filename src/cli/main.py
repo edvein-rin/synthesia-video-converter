@@ -45,7 +45,9 @@ def main(
 
     notes = extract_notes_from_video(video_file_path)
 
+    print("Saving notes to MIDI file...")
     save_notes_to_midi_file(notes, output_midi_file_path)
+    print("Successfully saved")
 
     output_sheet_music_pdf_file_path = (
         # TODO use pathlib to set extension
@@ -55,6 +57,8 @@ def main(
 
     # TODO check is LilyPond installed
 
+    print("Converting MIDI file into sheet music PDF...")
     midi_to_sheet_music_pdf(
         output_midi_file_path, output_sheet_music_pdf_file_path
     )
+    print("Successfully converted")
